@@ -106,8 +106,10 @@ func (app *MikapodRemote) RunMainRuntimeLoop() {
 
 	//TODO: REMOVE WHEN READY.
 	data := app.listTimeSeriesData()
-	app.uploadTimeSeriesData(data)
-	app.deleteTimeSeriesData(data)
+	wasUploaded := app.uploadTimeSeriesData(data)
+	if wasUploaded {
+		app.deleteTimeSeriesData(data)
+	}
 
     // DEVELOPERS NOTE:
 	// (1) The purpose of this block of code is to run as a goroutine in the
@@ -146,6 +148,8 @@ func (app *MikapodRemote) shutdown()  {
 func (app *MikapodRemote) tick()  {
 	log.Printf("Tick: Do something...")
 	data := app.listTimeSeriesData()
-	app.uploadTimeSeriesData(data)
-	app.deleteTimeSeriesData(data)
+	wasUploaded := app.uploadTimeSeriesData(data)
+	if wasUploaded {
+		app.deleteTimeSeriesData(data)
+	}
 }
