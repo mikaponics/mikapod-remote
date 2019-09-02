@@ -23,3 +23,12 @@ type TimeSeriesData struct {
     SoilMoistureUnit string `json:"soil_moisture_unit,omitempty"`
     Timestamp *timestamp.Timestamp `json:"timestamp,omitempty"`
 }
+
+// The time-series datum structure used to store the instrument datum of a single
+// reading.
+type TimeSeriesDatum struct {
+	Id int64
+    Instrument int32
+    Value float32
+    Timestamp *timestamp.Timestamp
+}

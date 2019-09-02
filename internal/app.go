@@ -104,6 +104,9 @@ func (app *MikapodRemote) RunMainRuntimeLoop() {
     // THIS CODE IS FOR TESTING, REMOVE WHEN READY TO USE, UNCOMMENT ABOVE.
 	app.ticker = time.NewTicker(1 * time.Minute)
 
+	//TODO: REMOVE
+	app.listTimeSeriesData()
+
     // DEVELOPERS NOTE:
 	// (1) The purpose of this block of code is to run as a goroutine in the
 	//     background as an anonymous function waiting to get either the
@@ -116,7 +119,7 @@ func (app *MikapodRemote) RunMainRuntimeLoop() {
         for {
             select {
 	            case <- app.ticker.C:
-					log.Printf("Do something...")
+					app.tick()
 				case <- app.done:
 					app.ticker.Stop()
 					log.Printf("Interrupted ticker.")
@@ -136,4 +139,8 @@ func (app *MikapodRemote) StopMainRuntimeLoop() {
 func (app *MikapodRemote) shutdown()  {
     app.storageCon.Close()
 	// app.remoteCon.Close()                                  //TODO: Uncommment
+}
+
+func (app *MikapodRemote) tick()  {
+	log.Printf("Tick: Do something...")
 }
