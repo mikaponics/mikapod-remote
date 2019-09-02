@@ -19,7 +19,7 @@ import (
 func (app *MikapodRemote) listTimeSeriesData() ([]*TimeSeriesDatum){
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	r, err := app.storage.ListTimeSeriesDatum(ctx, &pb.ListTimeSeriesDataRequest{})
+	r, err := app.storage.ListTimeSeriesData(ctx, &pb.ListTimeSeriesDataRequest{})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
@@ -29,13 +29,15 @@ func (app *MikapodRemote) listTimeSeriesData() ([]*TimeSeriesDatum){
 	// use it.
 	var list []*TimeSeriesDatum
 	for _, v := range r.Data {
-        tsd := &TimeSeriesDatum{
-            Id:         v.Id,
-            Instrument: v.Instrument,
-            Value:      v.Value,
-			Timestamp:  v.Timestamp,
-        }
-        list = append(list, tsd)
+		if v.Id > 0 { // Only accept valid time series data!
+			tsd := &TimeSeriesDatum{
+	            Id:         v.Id,
+	            Instrument: v.Instrument,
+	            Value:      v.Value,
+				Timestamp:  v.Timestamp,
+	        }
+	        list = append(list, tsd)
+		}
     }
 	return list
 }
@@ -43,5 +45,20 @@ func (app *MikapodRemote) listTimeSeriesData() ([]*TimeSeriesDatum){
 func (app *MikapodRemote) uploadTimeSeriesData(data []*TimeSeriesDatum) {
 	for _, v := range data {
 		log.Printf("TODO - UPLOAD DATA: %v", v)
+	}
+}
+
+func (app *MikapodRemote) deleteTimeSeriesData(data []*TimeSeriesDatum) {
+	var pks []int64
+	for _, v := range data {
+		pks = append(pks, v.Id)
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	_, err := app.storage.DeleteTimeSeriesData(ctx, &pb.DeleteTimeSeriesDataByPKsRequest{
+		Pks: pks,
+	})
+	if err != nil {
+		log.Fatalf("could not add time-series data to storage: %v", err)
 	}
 }

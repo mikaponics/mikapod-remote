@@ -104,9 +104,10 @@ func (app *MikapodRemote) RunMainRuntimeLoop() {
     // THIS CODE IS FOR TESTING, REMOVE WHEN READY TO USE, UNCOMMENT ABOVE.
 	app.ticker = time.NewTicker(1 * time.Minute)
 
-	//TODO: REMOVE
+	//TODO: REMOVE WHEN READY.
 	data := app.listTimeSeriesData()
 	app.uploadTimeSeriesData(data)
+	app.deleteTimeSeriesData(data)
 
     // DEVELOPERS NOTE:
 	// (1) The purpose of this block of code is to run as a goroutine in the
@@ -146,4 +147,5 @@ func (app *MikapodRemote) tick()  {
 	log.Printf("Tick: Do something...")
 	data := app.listTimeSeriesData()
 	app.uploadTimeSeriesData(data)
+	app.deleteTimeSeriesData(data)
 }
