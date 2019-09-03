@@ -113,7 +113,7 @@ The following instructions are specific to getting setup for [Raspberry Pi](http
 
     ```
     [Unit]
-    Description=Mikapod Poller Daemon
+    Description=Mikapod Remote Daemon
     After=multi-user.target
 
     [Service]

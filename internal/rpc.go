@@ -43,9 +43,11 @@ func (app *MikapodRemote) listTimeSeriesData() ([]*TimeSeriesDatum){
 }
 
 func (app *MikapodRemote) uploadTimeSeriesData(data []*TimeSeriesDatum) bool {
-	for _, v := range data {
-		log.Printf("TODO - UPLOAD DATA: %v", v)
-	}
+	//TODO: IMPLEMENT CODE HERE ...
+	
+	// for _, v := range data {
+	// 	log.Printf("TODO - UPLOAD DATA: %v", v)
+	// }
 	return false
 }
 
