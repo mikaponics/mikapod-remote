@@ -31,7 +31,7 @@ You must have the following installed before proceeding. If you are missing any 
 
     ```
     cd github.com/mikaponics/mikapod-remote
-    go run cmd/mikapod-remote/main.go
+    go run main.go
     ```
 
 ## Production
@@ -82,10 +82,10 @@ The following instructions are specific to getting setup for [Raspberry Pi](http
     go get -u google.golang.org/grpc
     ```
 
-8. Run our application.
+8. Go to our application directory.
 
     ```
-    cd ~/go/src/github.com/mikaponics/mikapod-remote/cmd/mikapod-remote
+    cd ~/go/src/github.com/mikaponics/mikapod-remote
     ```
 
 9. (Optional) Confirm our application builds on the raspberry pi device. You now should see a message saying ``gRPC server is running`` then the application is running.
@@ -94,11 +94,12 @@ The following instructions are specific to getting setup for [Raspberry Pi](http
     go run main.go
     ```
 
-10. Build for the ARM device
+10. Build for the ARM device and install it in our ``~/go/bin`` folder:
 
     ```
-    go build
+    go install
     ```
+
 
 ### Operation
 
@@ -117,7 +118,7 @@ The following instructions are specific to getting setup for [Raspberry Pi](http
 
     [Service]
     Type=idle
-    ExecStart=/home/pi/go/src/github.com/mikaponics/mikapod-remote/cmd/mikapod-remote/mikapod-remote
+    ExecStart=/home/pi/go/bin/mikapod-remote
     Restart=on-failure
     KillSignal=SIGTERM
 
