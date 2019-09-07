@@ -11,7 +11,8 @@ import (
 )
 
 func main() {
-	app := internal.InitMikapodRemote(configs.MikapodStorageServiceAddress, configs.MikaponicsRemoteServiceAddress)
+	mikaponicsRemoteServiceAddress := os.Getenv("MIKAPONICS_REMOTE_APP_ADDRESS")
+	app := internal.InitMikapodRemote(configs.MikapodStorageServiceAddress, mikaponicsRemoteServiceAddress)
 
     // DEVELOPERS CODE:
 	// The following code will create an anonymous goroutine which will have a

@@ -27,7 +27,13 @@ You must have the following installed before proceeding. If you are missing any 
     go get -u google.golang.org/grpc
     ```
 
-6. Run our application.
+6. Setup our environment variable. Please change to the address of our remote server.
+
+    ```
+    export MIKAPONICS_REMOTE_APP_ADDRESS="localhost:50053"
+    ```
+
+7. Run our application.
 
     ```
     cd github.com/mikaponics/mikapod-remote

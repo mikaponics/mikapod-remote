@@ -12,7 +12,7 @@ import (
 
     // "github.com/mikaponics/mikapod-remote/configs"
 	pb "github.com/mikaponics/mikapod-storage/api"
-	// pb2 "github.com/mikaponics/mikapod-soil-reader/api"   //TODO: Uncommment
+	pb2 "github.com/mikaponics/mikaponics-thing/api"
 )
 
 type MikapodRemote struct {
@@ -21,8 +21,8 @@ type MikapodRemote struct {
 	done chan bool
 	storageCon *grpc.ClientConn
 	storage pb.MikapodStorageClient
-	// remoteCon *grpc.ClientConn                             //TODO: Uncommment
-	// remote pb2.MikapodSoilReaderClient                     //TODO: Uncommment
+	remoteCon *grpc.ClientConn
+	remote pb2.MikaponicsThingClient
 }
 
 // Function will construct the Mikapod Remote application.
@@ -36,15 +36,14 @@ func InitMikapodRemote(mikapodStorageAddress string, mikaponicsRemoteServiceAddr
 	// Set up our protocol buffer interface.
 	storage := pb.NewMikapodStorageClient(storageCon)
 
-    // TODO: Uncommment
-    // // Set up a direct connection to the `mikapod-soil-remote` server.
-	// remoteCon, remoteErr := grpc.Dial(mikaponicsRemoteServiceAddress, grpc.WithInsecure())
-	// if remoteErr != nil {
-	// 	log.Fatalf("did not connect: %v", err)
-	// }
+    // Set up a direct connection to the `mikapod-soil-remote` server.
+	remoteCon, remoteErr := grpc.Dial(mikaponicsRemoteServiceAddress, grpc.WithInsecure())
+	if remoteErr != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
 	//
-	// // Set up our protocol buffer interface.
-	// remote := pb2.NewMikapodSoilReaderClient(remoteCon)
+	// Set up our protocol buffer interface.
+	remote := pb2.NewMikaponicsThingClient(remoteCon)
 
 	return &MikapodRemote{
 		timer: nil,
@@ -52,8 +51,8 @@ func InitMikapodRemote(mikapodStorageAddress string, mikaponicsRemoteServiceAddr
 		done: make(chan bool, 1), // Create a execution blocking channel.
 		storageCon: storageCon,
 		storage: storage,
-		// remoteCon: remoteCon,                              //TODO: Uncommment
-		// remote: remote,                                    //TODO: Uncommment
+		remoteCon: remoteCon,
+		remote: remote,
 	}
 }
 
