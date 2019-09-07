@@ -165,6 +165,13 @@ The following instructions are specific to getting setup for [Raspberry Pi](http
     sudo systemctl daemon-reload
     ```
 
+## Troubleshooting
+
+If you get an errors on your Raspberry stating: ``go not found`` then please run the following:
+
+```
+export PATH=$PATH:/usr/local/go/bin # put into ~/.profile
+```
 
 ## License
 
