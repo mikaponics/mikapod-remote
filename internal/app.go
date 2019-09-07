@@ -141,7 +141,7 @@ func (app *MikapodRemote) StopMainRuntimeLoop() {
 
 func (app *MikapodRemote) shutdown()  {
     app.storageCon.Close()
-	// app.remoteCon.Close()                                  //TODO: Uncommment
+	app.remoteCon.Close()
 }
 
 func (app *MikapodRemote) tick()  {
