@@ -100,15 +100,15 @@ func (app *MikapodRemote) RunMainRuntimeLoop() {
 	// 		return
 	// }
 
-    // THIS CODE IS FOR TESTING, REMOVE WHEN READY TO USE, UNCOMMENT ABOVE.
-	app.ticker = time.NewTicker(1 * time.Minute)
-
 	//TODO: REMOVE WHEN READY.
 	data := app.listTimeSeriesData()
 	wasUploaded := app.uploadTimeSeriesData(data)
 	if wasUploaded {
 		app.deleteTimeSeriesData(data)
 	}
+
+    // THIS CODE IS FOR TESTING, REMOVE WHEN READY TO USE, UNCOMMENT ABOVE.
+	app.ticker = time.NewTicker(1 * time.Minute)
 
     // DEVELOPERS NOTE:
 	// (1) The purpose of this block of code is to run as a goroutine in the
