@@ -41,7 +41,7 @@ func InitMikapodRemote(mikapodStorageAddress string, mikaponicsRemoteServiceAddr
 	if remoteErr != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
-	//
+
 	// Set up our protocol buffer interface.
 	remote := pb2.NewMikaponicsThingClient(remoteCon)
 
@@ -81,25 +81,6 @@ func minuteTicker() *time.Timer {
 func (app *MikapodRemote) RunMainRuntimeLoop() {
 	defer app.shutdown()
 
-    // //TODO: UNCOMMENT WHEN READY
-    // // DEVELOPERS NOTE:
-	// // (1) The purpose of this block of code is to find the future date where
-	// //     the minute just started, ex: 5:00 AM, 5:01, etc, and then start our
-	// //     main runtime loop to run along for every minute afterwords.
-	// // (2) If our application gets terminated by the user or system then we
-	// //     terminate our timer.
-    // log.Printf("Synching with local time...")
-	// app.timer = minuteTicker()
-	// select {
-	// 	case <- app.timer.C:
-	// 		log.Printf("Synchronized with local time.")
-	// 		app.ticker = time.NewTicker(1 * time.Minute)
-	// 	case <- app.done:
-	// 		app.timer.Stop()
-	// 		log.Printf("Interrupted timer.")
-	// 		return
-	// }
-
 	//TODO: REMOVE WHEN READY.
 	data := app.listTimeSeriesData()
 	wasUploaded := app.uploadTimeSeriesData(data)
@@ -107,7 +88,8 @@ func (app *MikapodRemote) RunMainRuntimeLoop() {
 		app.deleteTimeSeriesData(data)
 	}
 
-    // THIS CODE IS FOR TESTING, REMOVE WHEN READY TO USE, UNCOMMENT ABOVE.
+    // Setup a background timer which will upload the time-series data to the
+	// remote `Mikaponics web service`.
 	app.ticker = time.NewTicker(1 * time.Minute)
 
     // DEVELOPERS NOTE:
@@ -140,6 +122,7 @@ func (app *MikapodRemote) StopMainRuntimeLoop() {
 }
 
 func (app *MikapodRemote) shutdown()  {
+	// app.timer.Stop()
     app.storageCon.Close()
 	app.remoteCon.Close()
 }

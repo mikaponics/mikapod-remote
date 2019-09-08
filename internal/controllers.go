@@ -20,7 +20,7 @@ func (app *MikapodRemote) listTimeSeriesData() ([]*TimeSeriesDatum){
 	defer cancel()
 	r, err := app.storage.ListTimeSeriesData(ctx, &pb.ListTimeSeriesDataRequest{})
 	if err != nil {
-		log.Fatalf("could not greet: %v", err)
+		log.Fatalf("could not list from storage: %v", err)
 	}
 
     // The following block of code will iterate through our `protocol buffer`
@@ -42,23 +42,25 @@ func (app *MikapodRemote) listTimeSeriesData() ([]*TimeSeriesDatum){
 }
 
 func (app *MikapodRemote) uploadTimeSeriesData(data []*TimeSeriesDatum) bool {
+
     // Convert our `struct` formatted list to be of `protocol buffer`
 	// formatted list which we can use in our `grpc` output.
-	var list []*pb2.TimeSeriesDatum
+	var list []*pb2.TimeSeriesDatumRequest
 	for _, v := range data {
         // Create our `protocol buffer` single time-series datum object.
-        ri := &pb2.TimeSeriesDatum{
+        ri := &pb2.TimeSeriesDatumRequest{
 			TenantId:   1,
             SensorId:   v.Instrument,
             Value:      v.Value,
 			Timestamp:  v.Timestamp,
         }
 
+		log.Printf("UPLOADING %v", ri)
+
 		// Attach our single time-series datum object to our `protocol buffer`
 		// list of time-series data.
         list = append(list, ri)
     }
-
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
@@ -66,18 +68,11 @@ func (app *MikapodRemote) uploadTimeSeriesData(data []*TimeSeriesDatum) bool {
 		Data: list,
 	})
 	if err != nil {
-		log.Fatalf("could not add time-series data to storage: %v", err)
+		log.Fatalf("could not add time-series data to remote: %v", err)
 	}
-
-
-	return err != nil
-}
-
-func (app *MikapodRemote) uploadTimeSeriesDatum(datum *TimeSeriesDatum) bool {
-	log.Printf("TODO - UPLOAD DATA: %v", datum)
+	// return err == nil
 	return false
 }
-
 
 func (app *MikapodRemote) deleteTimeSeriesData(data []*TimeSeriesDatum) {
 	var pks []int64
@@ -90,6 +85,6 @@ func (app *MikapodRemote) deleteTimeSeriesData(data []*TimeSeriesDatum) {
 		Pks: pks,
 	})
 	if err != nil {
-		log.Fatalf("could not add time-series data to storage: %v", err)
+		log.Fatalf("could not delete time-series data to storage: %v", err)
 	}
 }
