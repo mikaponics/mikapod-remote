@@ -37,15 +37,14 @@ func (app *MikapodRemote) listTimeSeriesData() ([]*TimeSeriesDatum){
 }
 
 func (app *MikapodRemote) uploadTimeSeriesData(data []*TimeSeriesDatum) bool {
-
     // Convert our `struct` formatted list to be of `protocol buffer`
 	// formatted list which we can use in our `grpc` output.
-	var list []*pb2.TimeSeriesDatumRequest
+	var list []*pb2.SetTimeSeriesDatumRequest
 	for _, v := range data {
         // Create our `protocol buffer` single time-series datum object.
-        ri := &pb2.TimeSeriesDatumRequest{
-			TenantId:   1,
-            SensorId:   v.Instrument,
+        ri := &pb2.SetTimeSeriesDatumRequest{
+			TenantId:   GetTenantId(),
+            SensorId:   GetSensorIdFromInstrumentId(v.Instrument),
             Value:      v.Value,
 			Timestamp:  v.Timestamp,
         }
@@ -65,6 +64,8 @@ func (app *MikapodRemote) uploadTimeSeriesData(data []*TimeSeriesDatum) bool {
 	if err != nil {
 		log.Fatalf("could not add time-series data to remote: %v", err)
 	}
+
+    //TODO: PLEASE SWAP THE FOLLOWING COMMENTS WHEN THE REMOTE SERVER IS WORKING.
 	// return err == nil
 	return false
 }

@@ -27,10 +27,23 @@ You must have the following installed before proceeding. If you are missing any 
     go get -u google.golang.org/grpc
     ```
 
-6. Setup our environment variable. Please change to the address of our remote server.
+6. Setup our environment variable. Please change to the address of our remote server. Please adjust the sensor ID values based what was assugned frin the Mikaponics web service. If the data belongs to a different tenant please adjust the value, else leave as is!
 
     ```
+    # Mikaponics Web Service
     export MIKAPONICS_REMOTE_APP_ADDRESS="localhost:50053"
+
+    # Tenancy
+    export MIKAPOD_TENANT_ID=1
+
+    # Sensor IDs
+    export MIKAPOD_HUMIDITY_SENSOR_ID=1
+    export MIKAPOD_TEMPERATURE_SENSOR_ID=2
+    export MIKAPOD_PRESSURE_SENSOR_ID=3
+    export MIKAPOD_TEMPERATURE_BACKEND_SENSOR_ID=3
+    export MIKAPOD_ALTITUDE_SENSOR_ID=4
+    export MIKAPOD_ILLUMINANCE_SENSOR_ID=5
+    export MIKAPOD_SOIL_MOISTURE_SENSOR_ID=6
     ```
 
 7. Run our application.
