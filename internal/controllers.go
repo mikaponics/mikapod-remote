@@ -49,7 +49,7 @@ func (app *MikapodRemote) uploadTimeSeriesData(data []*TimeSeriesDatum) bool {
 			Timestamp:  v.Timestamp,
         }
 
-		log.Printf("UPLOADING %v", ri)
+		// log.Printf("UPLOADING %v", ri) // For debugging purposes only.
 
 		// Attach our single time-series datum object to our `protocol buffer`
 		// list of time-series data.

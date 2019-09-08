@@ -128,7 +128,7 @@ func (app *MikapodRemote) shutdown()  {
 }
 
 func (app *MikapodRemote) tick()  {
-	log.Printf("Tick: Do something...")
+	log.Printf("Uploading local data to remote web service.")
 	data := app.listTimeSeriesData()
 	wasUploaded := app.uploadTimeSeriesData(data)
 	if wasUploaded {
