@@ -27,7 +27,7 @@ func (app *MikapodRemote) listTimeSeriesData() ([]*TimeSeriesDatum){
 			tsd := &TimeSeriesDatum{
 	            Id:         v.Id,
 	            Instrument: v.Instrument,
-	            Value:      v.Value,
+	            Value:      float64(v.Value),
 				Timestamp:  v.Timestamp,
 	        }
 	        list = append(list, tsd)
@@ -49,7 +49,7 @@ func (app *MikapodRemote) uploadTimeSeriesData(data []*TimeSeriesDatum) bool {
 			Timestamp:  v.Timestamp,
         }
 
-		// log.Printf("UPLOADING %v", ri) // For debugging purposes only.
+		log.Printf("UPLOADING %v", ri) // For debugging purposes only.
 
 		// Attach our single time-series datum object to our `protocol buffer`
 		// list of time-series data.

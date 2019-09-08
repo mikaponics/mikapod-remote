@@ -29,6 +29,6 @@ type TimeSeriesData struct {
 type TimeSeriesDatum struct {
 	Id int64
     Instrument int32
-    Value float32
+    Value float64
     Timestamp *timestamp.Timestamp
 }
