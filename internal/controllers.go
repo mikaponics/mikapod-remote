@@ -3,13 +3,8 @@ package internal // github.com/mikaponics/mikapod-poller/internal
 import (
 	"context"
 	"log"
-	// // "os"
 	"time"
-	// "fmt"
 
-	// "google.golang.org/grpc"
-
-    // "github.com/mikaponics/mikapod-poller/configs"
 	pb "github.com/mikaponics/mikapod-storage/api"
 	pb2 "github.com/mikaponics/mikaponics-thing/api"
 )
