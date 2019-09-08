@@ -37,3 +37,7 @@ func GetSensorIdFromInstrumentId(instrumentId int32) int64 {
         return 0
     }
 }
+
+func GetAuthorizationBearerToken() string {
+    return os.Getenv("MIKAPONICS_REMOTE_API_KEY")
+}

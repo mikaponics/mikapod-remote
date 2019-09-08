@@ -37,7 +37,7 @@ func InitMikapodRemote(mikapodStorageAddress string, mikaponicsRemoteServiceAddr
 	storage := pb.NewMikapodStorageClient(storageCon)
 
     // Set up a direct connection to the `mikapod-soil-remote` server.
-	remoteCon, remoteErr := grpc.Dial(mikaponicsRemoteServiceAddress, grpc.WithInsecure())
+	remoteCon, remoteErr := grpc.Dial(mikaponicsRemoteServiceAddress, grpc.WithInsecure(), grpc.WithUnaryInterceptor(unaryInterceptor)) // Ex. Added `UnaryInterceptor`.
 	if remoteErr != nil {
 		log.Fatalf("did not connect: %v", err)
 	}

@@ -32,6 +32,7 @@ You must have the following installed before proceeding. If you are missing any 
     ```
     # Mikaponics Web Service
     export MIKAPONICS_REMOTE_APP_ADDRESS="localhost:50053"
+    export MIKAPONICS_REMOTE_API_KEY="1234567890"
 
     # Tenancy
     export MIKAPOD_TENANT_ID=1
