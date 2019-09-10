@@ -6,11 +6,13 @@ import (
 	// "os"
 	"time"
 	// "fmt"
+	"crypto/tls"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	// "github.com/golang/protobuf/ptypes/timestamp"
 
-    // "github.com/mikaponics/mikapod-remote/configs"
+    "github.com/mikaponics/mikapod-remote/configs"
 	pb "github.com/mikaponics/mikapod-storage/api"
 	pb2 "github.com/mikaponics/mikaponics-thing/api"
 )
@@ -36,13 +38,37 @@ func InitMikapodRemote(mikapodStorageAddress string, mikaponicsRemoteServiceAddr
 	// Set up our protocol buffer interface.
 	storage := pb.NewMikapodStorageClient(storageCon)
 
-    // Set up a direct connection to the `mikapod-soil-remote` server.
-	remoteCon, remoteErr := grpc.Dial(
-		mikaponicsRemoteServiceAddress,
-		grpc.WithInsecure(),
-		grpc.WithTimeout(10*time.Second),
-		grpc.WithUnaryInterceptor(unaryInterceptor), // Ex. Added `UnaryInterceptor`.
-	)
+    // DEVELOPERS NOTE:
+	// (1) If the REMOTE web service is using SSL then we need to force it without
+	//     checking the source of origin. This option should be set if you are
+	//     running this code in production environment. Special thanks to the
+	//     following articles:
+	//     - https://www.nginx.com/blog/nginx-1-13-10-grpc/#grpc_pass
+	//     - https://itnext.io/effectively-communicate-between-microservices-de7252ba2f3c
+	//     - https://www.youtube.com/watch?v=bhiJfNDWRsY
+	//     - https://itnext.io/practical-guide-to-securing-grpc-connections-with-go-and-tls-part-1-f63058e9d6d1
+	//     - https://itnext.io/practical-guide-to-securing-grpc-connections-with-go-and-tls-part-2-994ef93b8ea9
+	// (2) If the REMOTE web service is not using SSL certificate, which is
+	//     typically found on your developer environment then run that code.
+    var remoteCon *grpc.ClientConn
+	var remoteErr error
+	if configs.GetIsRemoteUsingSSL() {
+		creds := credentials.NewTLS( &tls.Config{ InsecureSkipVerify: true } )
+		remoteCon, remoteErr = grpc.Dial(
+			mikaponicsRemoteServiceAddress,
+			// grpc.WithInsecure(),
+			grpc.WithTransportCredentials( creds ),
+			grpc.WithTimeout(10*time.Second),
+			grpc.WithUnaryInterceptor(unaryInterceptor), // Ex. Added `UnaryInterceptor`.
+		)
+	} else {
+		remoteCon, remoteErr = grpc.Dial(
+			mikaponicsRemoteServiceAddress,
+			grpc.WithInsecure(),
+			grpc.WithTimeout(10*time.Second),
+			grpc.WithUnaryInterceptor(unaryInterceptor), // Ex. Added `UnaryInterceptor`.
+		)
+	}
 	if remoteErr != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
